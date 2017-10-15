@@ -236,6 +236,13 @@ module RSpotify
       User.oauth_get(@id, url)
     end
 
+    def albums(limit: 20, offset: 0)
+      url = "users/#{@id}/albums?limit=#{limit}&offset=#{offset}"
+      response = RSpotify.resolve_auth_request(@id, url)
+      return response if RSpotify.raw_response
+      response['items'].map { |i| Album.new i }
+    end
+
     # Returns all playlists from user
     #
     # @param limit  [Integer] Maximum number of playlists to return. Maximum: 50. Minimum: 1. Default: 20.
